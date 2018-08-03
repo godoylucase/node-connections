@@ -1,5 +1,7 @@
 package com.upwork.interview.network;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -13,11 +15,16 @@ public class Node implements PropertyChangeListener {
     private int id;
     private final Set<Node> connectedNodes;
 
+    @JsonIgnore
     private PropertyChangeSupport propertyChangeSupport;
 
-    public Node(int id) {
-        this.id = id;
+    public Node() {
         this.connectedNodes = new HashSet<>();
+    }
+
+    public Node(int id) {
+        this();
+        this.id = id;
         propertyChangeSupport = new PropertyChangeSupport(this);
     }
 
@@ -66,6 +73,10 @@ public class Node implements PropertyChangeListener {
                 addNode(changeSet.getDestination());
             }
         }
+    }
+
+    public int getId() {
+        return id;
     }
 
     @Override

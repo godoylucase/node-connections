@@ -1,7 +1,5 @@
 package com.upwork.interview.network;
 
-import com.google.common.annotations.VisibleForTesting;
-
 import java.util.HashMap;
 import java.util.stream.IntStream;
 
@@ -48,8 +46,7 @@ public class Network {
         }
     }
 
-    @VisibleForTesting
-    HashMap<Integer, Node> getNodesMap() {
+    public HashMap<Integer, Node> getNodesMap() {
         return nodesMap;
     }
 

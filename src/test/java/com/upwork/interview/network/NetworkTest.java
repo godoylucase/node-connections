@@ -3,10 +3,8 @@ package com.upwork.interview.network;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-
+import static com.upwork.interview.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.ThrowableAssert.catchThrowableOfType;
 
 public class NetworkTest {
@@ -27,7 +25,7 @@ public class NetworkTest {
 
         assertFirstConnection(nodeZero, nodeOne);
 
-        assertRemainingEmptyNodes(2, 3, 4, 5, 6, 7, 8, 9);
+        assertRemainingEmptyNodes(network, 2, 3, 4, 5, 6, 7, 8, 9);
     }
 
     @Test
@@ -39,7 +37,7 @@ public class NetworkTest {
 
         assertFirstConnection(nodeZero, nodeOne);
 
-        assertRemainingEmptyNodes(2, 3, 4, 5, 6, 7, 8, 9);
+        assertRemainingEmptyNodes(network, 2, 3, 4, 5, 6, 7, 8, 9);
     }
 
     @Test
@@ -54,11 +52,9 @@ public class NetworkTest {
         Node nodeTwo = network.getNodesMap().get(2);
         network.connect(1, 2);
 
-        assertThat(nodeTwo.getConnectedNodes()).containsExactlyInAnyOrder(nodeZero, nodeOne);
-        assertThat(nodeOne.getConnectedNodes()).containsExactlyInAnyOrder(nodeZero, nodeTwo);
-        assertThat(nodeZero.getConnectedNodes()).containsExactlyInAnyOrder(nodeOne, nodeTwo);
+        assertMultipleConnections(nodeZero, nodeOne, nodeTwo);
 
-        assertRemainingEmptyNodes(3, 4, 5, 6, 7, 8, 9);
+        assertRemainingEmptyNodes(network, 3, 4, 5, 6, 7, 8, 9);
     }
 
     @Test
@@ -73,11 +69,9 @@ public class NetworkTest {
         Node nodeTwo = network.getNodesMap().get(2);
         network.connect(2, 1);
 
-        assertThat(nodeTwo.getConnectedNodes()).containsExactlyInAnyOrder(nodeZero, nodeOne);
-        assertThat(nodeOne.getConnectedNodes()).containsExactlyInAnyOrder(nodeZero, nodeTwo);
-        assertThat(nodeZero.getConnectedNodes()).containsExactlyInAnyOrder(nodeOne, nodeTwo);
+        assertMultipleConnections(nodeZero, nodeOne, nodeTwo);
 
-        assertRemainingEmptyNodes(3, 4, 5, 6, 7, 8, 9);
+        assertRemainingEmptyNodes(network, 3, 4, 5, 6, 7, 8, 9);
     }
 
     @Test
@@ -107,7 +101,47 @@ public class NetworkTest {
         assertThat(nodeThree.getConnectedNodes()).containsExactlyInAnyOrder(nodeZero, nodeOne, nodeTwo, nodeFour);
         assertThat(nodeFour.getConnectedNodes()).containsExactlyInAnyOrder(nodeZero, nodeOne, nodeTwo, nodeThree);
 
-        assertRemainingEmptyNodes(5, 6, 7, 8, 9);
+        assertRemainingEmptyNodes(network, 5, 6, 7, 8, 9);
+    }
+
+    @Test
+    public void testConnectCircularReference() {
+        network.connect(0, 1);
+
+        Node nodeZero = network.getNodesMap().get(0);
+        Node nodeOne = network.getNodesMap().get(1);
+
+        assertFirstConnection(nodeZero, nodeOne);
+
+        Node nodeTwo = network.getNodesMap().get(2);
+        network.connect(1, 2);
+
+        assertMultipleConnections(nodeZero, nodeOne, nodeTwo);
+
+        network.connect(2, 0);
+
+        assertMultipleConnections(nodeZero, nodeOne, nodeTwo);
+        assertRemainingEmptyNodes(network, 3, 4, 5, 6, 7, 8, 9);
+    }
+
+    @Test
+    public void testConnectCircularReferenceOtherWayAround() {
+        network.connect(0, 1);
+
+        Node nodeZero = network.getNodesMap().get(0);
+        Node nodeOne = network.getNodesMap().get(1);
+
+        assertFirstConnection(nodeZero, nodeOne);
+
+        Node nodeTwo = network.getNodesMap().get(2);
+        network.connect(1, 2);
+
+        assertMultipleConnections(nodeZero, nodeOne, nodeTwo);
+
+        network.connect(0, 2);
+
+        assertMultipleConnections(nodeZero, nodeOne, nodeTwo);
+        assertRemainingEmptyNodes(network, 3, 4, 5, 6, 7, 8, 9);
     }
 
     @Test
@@ -119,7 +153,7 @@ public class NetworkTest {
 
         assertFirstConnection(nodeZero, nodeOne);
 
-        assertThat(network.query(0,1)).isTrue();
+        assertThat(network.query(0, 1)).isTrue();
     }
 
     @Test
@@ -131,37 +165,19 @@ public class NetworkTest {
 
         assertFirstConnection(nodeZero, nodeOne);
 
-        assertThat(network.query(1,0)).isTrue();
+        assertThat(network.query(1, 0)).isTrue();
     }
 
     @Test
     public void testQueryNonConnectedNodes() {
-        assertThat(network.query(1,0)).isFalse();
+        assertThat(network.query(1, 0)).isFalse();
     }
 
     @Test
     public void testQueryNonConnectedNodesOtherWayAround() {
-        assertThat(network.query(0,1)).isFalse();
+        assertThat(network.query(0, 1)).isFalse();
     }
 
-    private void assertFirstConnection(Node nodeZero, Node nodeOne) {
-        assertThat(nodeZero).isNotNull();
-        assertThat(nodeOne).isNotNull();
-
-        assertThat(nodeZero.getConnectedNodes()).containsOnly(nodeOne);
-        assertThat(nodeOne.getConnectedNodes()).containsOnly(nodeZero);
-    }
-
-    private void assertRemainingEmptyNodes(Integer... ids) {
-        Arrays.asList(ids).forEach(id -> {
-            Node node = network.getNodesMap().get(id);
-            if (node != null) {
-                assertThat(node.getConnectedNodes()).isEmpty();
-            } else {
-                fail(String.format("This id %d does not exist", id));
-            }
-        });
-    }
 
     @Test
     public void testConnectNoExistingOriginNode() {

@@ -1,0 +1,6 @@
+cxf:
+  path: /api
+
+interview:
+  network:
+    nodesAmount: 20

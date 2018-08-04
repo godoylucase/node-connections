@@ -1,0 +1,18 @@
+version: '2.1'
+services:
+  interview:
+    container_name: upwork-interview
+    hostname: upwork-interview
+    image: upwork/interview
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    networks:
+      - spring-cloud-network
+    logging:
+      driver: json-file
+
+networks:
+    spring-cloud-network:
+        driver: bridge

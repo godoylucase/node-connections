@@ -3,6 +3,11 @@ package com.upwork.interview.network;
 import java.util.HashMap;
 import java.util.stream.IntStream;
 
+/**
+ * Keeps registry of the connected nodes and manages
+ * nodes connections
+ *
+ */
 public class Network {
 
     private final HashMap<Integer, Node> nodesMap;
@@ -12,6 +17,12 @@ public class Network {
         IntStream.range(0, nodesAmount).forEach(i -> this.nodesMap.put(i, new Node(i)));
     }
 
+    /**
+     * Connects two valid nodes
+     *
+     * @param origin node
+     * @param destination node
+     */
     public void connect(int origin, int destination) {
         Node originNode = nodesMap.get(origin);
         Node destinationNode = nodesMap.get(destination);
@@ -20,6 +31,13 @@ public class Network {
         originNode.connectNode(destinationNode);
     }
 
+    /**
+     * Verifies if two valid nodes are connected
+     *
+     * @param origin node
+     * @param destination node
+     * @return
+     */
     public boolean query(int origin, int destination) {
         Node originNode = nodesMap.get(origin);
         Node destinationNode = nodesMap.get(destination);

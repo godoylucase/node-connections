@@ -14,10 +14,21 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public interface ConnectionResource {
 
+    /**
+     * Executes nodes connection
+     *
+     * @param connectNodes valid nodes to connect
+     * @return
+     */
     @POST
     @Path("/connect")
     Response connectNodes(@Valid ConnectionDto connectNodes);
 
+    /**
+     * @param origin node
+     * @param destination node
+     * @return if nodes are connected and other connections that origin node holds
+     */
     @GET
     @Path("/query")
     Response queryConnection(@NotNull(message = "origin parameter must not be null value")

@@ -5,7 +5,7 @@ import com.upwork.interview.TestUtils;
 import com.upwork.interview.api.model.ConnectionDto;
 import com.upwork.interview.api.model.QueryConnectionDto;
 import com.upwork.interview.network.Network;
-import com.upwork.interview.network.Node;
+import com.upwork.interview.network.impl.Node;
 import com.upwork.interview.service.NetworkService;
 import org.junit.Before;
 import org.junit.Test;

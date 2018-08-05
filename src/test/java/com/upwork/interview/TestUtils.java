@@ -1,7 +1,7 @@
 package com.upwork.interview;
 
 import com.upwork.interview.network.Network;
-import com.upwork.interview.network.Node;
+import com.upwork.interview.network.impl.Node;
 
 import java.util.Arrays;
 
@@ -24,9 +24,9 @@ public class TestUtils {
         assertThat(nodeZero.getConnectedNodes()).containsExactlyInAnyOrder(nodeOne, nodeTwo);
     }
 
-    public static void assertRemainingEmptyNodes(Network network, Integer... ids) {
+    public static void assertRemainingEmptyNodes(Network networkObserverPattern, Integer... ids) {
         Arrays.asList(ids).forEach(id -> {
-            Node node = network.getNodesMap().get(id);
+            Node node = networkObserverPattern.getNodesMap().get(id);
             if (node != null) {
                 assertThat(node.getConnectedNodes()).isEmpty();
             } else {

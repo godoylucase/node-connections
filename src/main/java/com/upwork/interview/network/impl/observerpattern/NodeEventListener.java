@@ -1,33 +1,23 @@
-package com.upwork.interview.network;
+package com.upwork.interview.network.impl.observerpattern;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.upwork.interview.network.impl.Node;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Node implements PropertyChangeListener {
+public class NodeEventListener extends Node implements PropertyChangeListener {
 
-    private int id;
-    private final Set<Node> connectedNodes;
-
-    @JsonIgnore
     private PropertyChangeSupport propertyChangeSupport;
 
-    public Node() {
-        this.connectedNodes = new HashSet<>();
-    }
-
-    public Node(int id) {
-        this();
-        this.id = id;
+    public NodeEventListener(int id) {
+        super(id);
         propertyChangeSupport = new PropertyChangeSupport(this);
     }
 
+    @Override
     public void connectNode(Node toNode) {
         connectNode(toNode, false);
     }
@@ -41,7 +31,7 @@ public class Node implements PropertyChangeListener {
 
     private void addNode(Node node) {
         this.connectedNodes.add(node);
-        addPropertyChangeListener(node);
+        addPropertyChangeListener((NodeEventListener) node);
     }
 
     private void addPropertyChangeListener(PropertyChangeListener pcl) {
@@ -73,27 +63,6 @@ public class Node implements PropertyChangeListener {
                 addNode(changeSet.getDestination());
             }
         }
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Node node = (Node) o;
-        return id == node.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    public Set<Node> getConnectedNodes() {
-        return connectedNodes;
     }
 
 }

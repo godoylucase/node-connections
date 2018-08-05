@@ -1,53 +1,35 @@
 package com.upwork.interview.network;
 
+import com.upwork.interview.network.impl.Node;
+
 import java.util.HashMap;
-import java.util.stream.IntStream;
 
 /**
- * Keeps registry of the connected nodes and manages
+ * Keeps registry of the network's nodes and manages
  * nodes connections
- *
  */
-public class Network {
-
-    private final HashMap<Integer, Node> nodesMap;
-
-    public Network(int nodesAmount) {
-        this.nodesMap = new HashMap<>(nodesAmount);
-        IntStream.range(0, nodesAmount).forEach(i -> this.nodesMap.put(i, new Node(i)));
-    }
+public interface Network {
 
     /**
      * Connects two valid nodes
      *
-     * @param origin node
+     * @param origin      node
      * @param destination node
      */
-    public void connect(int origin, int destination) {
-        Node originNode = nodesMap.get(origin);
-        Node destinationNode = nodesMap.get(destination);
-        checkPreconditions(originNode, destinationNode);
-
-        originNode.connectNode(destinationNode);
-    }
+    void connect(int origin, int destination);
 
     /**
      * Verifies if two valid nodes are connected
      *
-     * @param origin node
+     * @param origin      node
      * @param destination node
      * @return
      */
-    public boolean query(int origin, int destination) {
-        Node originNode = nodesMap.get(origin);
-        Node destinationNode = nodesMap.get(destination);
-        checkPreconditions(originNode, destinationNode);
+    boolean query(int origin, int destination);
 
-        return originNode.getConnectedNodes().contains(destinationNode)
-                && destinationNode.getConnectedNodes().contains(originNode);
-    }
+    HashMap<Integer, Node> getNodesMap();
 
-    private void checkPreconditions(Node origin, Node destination) {
+    default void checkPreconditions(Node origin, Node destination) {
         String message = null;
         if (origin == null && destination == null) {
             message = "origin neither destination nodes exists";
@@ -62,10 +44,6 @@ public class Network {
         if (message != null) {
             throw new IllegalArgumentException(message);
         }
-    }
-
-    public HashMap<Integer, Node> getNodesMap() {
-        return nodesMap;
     }
 
 }

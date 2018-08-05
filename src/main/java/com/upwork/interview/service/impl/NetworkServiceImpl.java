@@ -5,7 +5,8 @@ import com.upwork.interview.api.model.ConnectionDto;
 import com.upwork.interview.api.model.QueryConnectionDto;
 import com.upwork.interview.configuration.InterviewConfiguration;
 import com.upwork.interview.network.Network;
-import com.upwork.interview.network.Node;
+import com.upwork.interview.network.impl.observerpattern.NetworkObserverPattern;
+import com.upwork.interview.network.impl.Node;
 import com.upwork.interview.service.NetworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class NetworkServiceImpl implements NetworkService {
 
     @Autowired
     public NetworkServiceImpl(InterviewConfiguration configuration) {
-        this.network = new Network(configuration.getNodesAmount());
+        this.network = new NetworkObserverPattern(configuration.getNodesAmount());
     }
 
     @Override

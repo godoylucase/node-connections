@@ -1,4 +1,6 @@
-package com.upwork.interview.network;
+package com.upwork.interview.network.impl.observerpattern;
+
+import com.upwork.interview.network.impl.Node;
 
 import java.util.HashSet;
 import java.util.Set;

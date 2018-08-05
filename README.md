@@ -2,8 +2,8 @@
 ### [upwork exercise](https://url.upwork.com/_01Vi9EXRg9YOji9g3YD1cO39kiowZFZdub)
 
 The exercise has been solved using 2 different strategies:
-- SEARCH: iterating over connected nodes from first parameter till reach the connection with the second one or not
-- OBSERVER: using observer pattern, an event broadcasting that holds with the new connected node details, it is sent to 
+- `SEARCH`: iterating over connected nodes from first parameter till reach the connection with the second one or not
+- `OBSERVER`: using observer pattern, an event broadcasting that holds with the new connected node details, it is sent to 
 all the other nodes connected to it.
 
 The main reason I came up with this 2 possible solutions it is the fact that SEARCH could take some time till reach the connection path

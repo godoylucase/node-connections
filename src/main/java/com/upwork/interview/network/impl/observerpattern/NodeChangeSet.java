@@ -7,9 +7,9 @@ import java.util.Set;
 
 public class NodeChangeSet {
 
+    private final Set<Node> sourcesConnections;
     private Node source;
     private Node destination;
-    private final Set<Node> sourcesConnections;
     private boolean callback;
 
     public NodeChangeSet(Node source, Node destination, Set<Node> sourcesConnections, boolean callback) {

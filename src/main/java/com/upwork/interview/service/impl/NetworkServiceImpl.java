@@ -5,7 +5,7 @@ import com.upwork.interview.api.model.ConnectionDto;
 import com.upwork.interview.api.model.QueryConnectionDto;
 import com.upwork.interview.configuration.InterviewConfiguration;
 import com.upwork.interview.network.Network;
-import com.upwork.interview.network.impl.observerpattern.NetworkObserverPattern;
+import com.upwork.interview.network.NetworkFactory;
 import com.upwork.interview.network.impl.Node;
 import com.upwork.interview.service.NetworkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class NetworkServiceImpl implements NetworkService {
 
     @Autowired
     public NetworkServiceImpl(InterviewConfiguration configuration) {
-        this.network = new NetworkObserverPattern(configuration.getNodesAmount());
+        this.network = NetworkFactory.getNetwork(configuration.getNodesAmount(), configuration.getNetworkSolutionType());
     }
 
     @Override
@@ -40,9 +40,6 @@ public class NetworkServiceImpl implements NetworkService {
             boolean connected = network.query(connectNodes.getOrigin(), connectNodes.getDestination());
             QueryConnectionDto dto = new QueryConnectionDto(connectNodes.getOrigin(), connectNodes.getDestination(), connected);
             Node originNode = network.getNodesMap().get(connectNodes.getOrigin());
-            originNode.getConnectedNodes().stream()
-                    .filter(node -> node.getId() != connectNodes.getDestination())
-                    .forEach(node -> dto.getOtherOriginConnections().add(node.getId()));
 
             return dto;
         } catch (IllegalArgumentException e) {

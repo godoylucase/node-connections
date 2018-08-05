@@ -2,7 +2,7 @@ package com.upwork.interview.network;
 
 import com.upwork.interview.network.impl.Node;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Keeps registry of the network's nodes and manages
@@ -27,7 +27,7 @@ public interface Network {
      */
     boolean query(int origin, int destination);
 
-    HashMap<Integer, Node> getNodesMap();
+    Map<Integer, Node> getNodesMap();
 
     default void checkPreconditions(Node origin, Node destination) {
         String message = null;

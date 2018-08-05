@@ -78,32 +78,7 @@ public class NetworkObserverPatternTest {
 
     @Test
     public void testConnectWithExistingConnectionsBeforeAddingNonEmptyNode() {
-        Node nodeZero = networkObserverPattern.getNodesMap().get(0);
-        Node nodeOne = networkObserverPattern.getNodesMap().get(1);
-        Node nodeTwo = networkObserverPattern.getNodesMap().get(2);
-        Node nodeThree = networkObserverPattern.getNodesMap().get(3);
-        Node nodeFour = networkObserverPattern.getNodesMap().get(4);
-
-        networkObserverPattern.connect(0, 1);
-
-        assertFirstConnection(nodeZero, nodeOne);
-
-        networkObserverPattern.connect(4, 2);
-        networkObserverPattern.connect(2, 3);
-
-        assertThat(nodeTwo.getConnectedNodes()).containsExactlyInAnyOrder(nodeThree, nodeFour);
-        assertThat(nodeThree.getConnectedNodes()).containsExactlyInAnyOrder(nodeTwo, nodeFour);
-        assertThat(nodeFour.getConnectedNodes()).containsExactlyInAnyOrder(nodeTwo, nodeThree);
-
-        networkObserverPattern.connect(2, 0);
-
-        assertThat(nodeZero.getConnectedNodes()).containsExactlyInAnyOrder(nodeOne, nodeTwo, nodeThree, nodeFour);
-        assertThat(nodeOne.getConnectedNodes()).containsExactlyInAnyOrder(nodeZero, nodeTwo, nodeThree, nodeFour);
-        assertThat(nodeTwo.getConnectedNodes()).containsExactlyInAnyOrder(nodeZero, nodeOne, nodeThree, nodeFour);
-        assertThat(nodeThree.getConnectedNodes()).containsExactlyInAnyOrder(nodeZero, nodeOne, nodeTwo, nodeFour);
-        assertThat(nodeFour.getConnectedNodes()).containsExactlyInAnyOrder(nodeZero, nodeOne, nodeTwo, nodeThree);
-
-        assertRemainingEmptyNodes(networkObserverPattern, 5, 6, 7, 8, 9);
+        connectingNonEmptyNodes();
     }
 
     @Test
@@ -146,6 +121,35 @@ public class NetworkObserverPatternTest {
         assertRemainingEmptyNodes(networkObserverPattern, 3, 4, 5, 6, 7, 8, 9);
     }
 
+    private void connectingNonEmptyNodes() {
+        Node nodeZero = networkObserverPattern.getNodesMap().get(0);
+        Node nodeOne = networkObserverPattern.getNodesMap().get(1);
+        Node nodeTwo = networkObserverPattern.getNodesMap().get(2);
+        Node nodeThree = networkObserverPattern.getNodesMap().get(3);
+        Node nodeFour = networkObserverPattern.getNodesMap().get(4);
+
+        networkObserverPattern.connect(0, 1);
+
+        assertFirstConnection(nodeZero, nodeOne);
+
+        networkObserverPattern.connect(4, 2);
+        networkObserverPattern.connect(2, 3);
+
+        assertThat(nodeTwo.getConnectedNodes()).containsExactlyInAnyOrder(nodeThree, nodeFour);
+        assertThat(nodeThree.getConnectedNodes()).containsExactlyInAnyOrder(nodeTwo, nodeFour);
+        assertThat(nodeFour.getConnectedNodes()).containsExactlyInAnyOrder(nodeTwo, nodeThree);
+
+        networkObserverPattern.connect(2, 0);
+
+        assertThat(nodeZero.getConnectedNodes()).containsExactlyInAnyOrder(nodeOne, nodeTwo, nodeThree, nodeFour);
+        assertThat(nodeOne.getConnectedNodes()).containsExactlyInAnyOrder(nodeZero, nodeTwo, nodeThree, nodeFour);
+        assertThat(nodeTwo.getConnectedNodes()).containsExactlyInAnyOrder(nodeZero, nodeOne, nodeThree, nodeFour);
+        assertThat(nodeThree.getConnectedNodes()).containsExactlyInAnyOrder(nodeZero, nodeOne, nodeTwo, nodeFour);
+        assertThat(nodeFour.getConnectedNodes()).containsExactlyInAnyOrder(nodeZero, nodeOne, nodeTwo, nodeThree);
+
+        assertRemainingEmptyNodes(networkObserverPattern, 5, 6, 7, 8, 9);
+    }
+
     @Test
     public void testQueryConnectedNodes() {
         networkObserverPattern.connect(0, 1);
@@ -168,6 +172,20 @@ public class NetworkObserverPatternTest {
         assertFirstConnection(nodeZero, nodeOne);
 
         assertThat(networkObserverPattern.query(1, 0)).isTrue();
+    }
+
+    @Test
+    public void testQueryComplexConnections() {
+        connectingNonEmptyNodes();
+        assertThat(networkObserverPattern.query(0, 1)).isTrue();
+        assertThat(networkObserverPattern.query(2, 4)).isTrue();
+        assertThat(networkObserverPattern.query(2, 3)).isTrue();
+        assertThat(networkObserverPattern.query(2, 0)).isTrue();
+
+        assertThat(networkObserverPattern.query(0, 4)).isTrue();
+        assertThat(networkObserverPattern.query(4, 1)).isTrue();
+        assertThat(networkObserverPattern.query(3, 1)).isTrue();
+        assertThat(networkObserverPattern.query(3, 4)).isTrue();
     }
 
     @Test

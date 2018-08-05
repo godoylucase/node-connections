@@ -1,12 +1,8 @@
 package com.upwork.interview.api.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class QueryConnectionDto extends ConnectionDto {
 
     private boolean connected;
-    private List<Integer> otherOriginConnections = new ArrayList<>();
 
     public QueryConnectionDto() {
         super();
@@ -23,14 +19,6 @@ public class QueryConnectionDto extends ConnectionDto {
 
     public void setConnected(boolean connected) {
         this.connected = connected;
-    }
-
-    public List<Integer> getOtherOriginConnections() {
-        return otherOriginConnections;
-    }
-
-    public void setOtherOriginConnections(List<Integer> otherOriginConnections) {
-        this.otherOriginConnections = otherOriginConnections;
     }
 
 }

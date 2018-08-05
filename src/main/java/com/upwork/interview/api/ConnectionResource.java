@@ -25,7 +25,7 @@ public interface ConnectionResource {
     Response connectNodes(@Valid ConnectionDto connectNodes);
 
     /**
-     * @param origin node
+     * @param origin      node
      * @param destination node
      * @return if nodes are connected and other connections that origin node holds
      */

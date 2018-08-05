@@ -1,18 +1,15 @@
 package com.upwork.interview.network.impl.observerpattern;
 
-import com.upwork.interview.network.Network;
+import com.upwork.interview.network.AbstractNetwork;
 import com.upwork.interview.network.impl.Node;
 
-import java.util.HashMap;
 import java.util.stream.IntStream;
 
-public class NetworkObserverPattern implements Network {
+public class NetworkObserverPattern extends AbstractNetwork {
 
-    private final HashMap<Integer, Node> nodesMap;
-
-    public NetworkObserverPattern(int nodesAmount) {
-        this.nodesMap = new HashMap<>(nodesAmount);
-        IntStream.range(0, nodesAmount).forEach(i -> this.nodesMap.put(i, new NodeEventListener(i)));
+    public NetworkObserverPattern(int networkSize) {
+        super(networkSize);
+        IntStream.range(0, networkSize).forEach(i -> this.nodesMap.put(i, new NodeEventListener(i)));
     }
 
     @Override
@@ -32,11 +29,6 @@ public class NetworkObserverPattern implements Network {
 
         return originNode.getConnectedNodes().contains(destinationNode)
                 && destinationNode.getConnectedNodes().contains(originNode);
-    }
-
-
-    public HashMap<Integer, Node> getNodesMap() {
-        return nodesMap;
     }
 
 }

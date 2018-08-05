@@ -6,8 +6,8 @@ import java.util.Set;
 
 public class Node {
 
-    protected int id;
     protected final Set<Node> connectedNodes;
+    protected int id;
 
     public Node() {
         this.connectedNodes = new HashSet<>();

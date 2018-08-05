@@ -4,3 +4,4 @@ cxf:
 interview:
   network:
     nodesAmount: 20
+    networkSolutionType: OBSERVER

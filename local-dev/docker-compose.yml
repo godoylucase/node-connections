@@ -8,6 +8,8 @@ services:
       - 8080
     ports:
       - 8080:8080
+    environment:
+      - interview.network.networkSolutionType=OBSERVER
     networks:
       - spring-cloud-network
     logging:

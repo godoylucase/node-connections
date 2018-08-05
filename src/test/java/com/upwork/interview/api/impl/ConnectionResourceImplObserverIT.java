@@ -1,14 +1,15 @@
-package com.upwork.interview.api.imp;
+package com.upwork.interview.api.impl;
 
 import com.upwork.interview.InterviewIntegrationTests;
 import com.upwork.interview.TestUtils;
 import com.upwork.interview.api.model.ConnectionDto;
 import com.upwork.interview.api.model.QueryConnectionDto;
 import com.upwork.interview.network.Network;
-import com.upwork.interview.network.Node;
+import com.upwork.interview.network.impl.Node;
 import com.upwork.interview.service.NetworkService;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.core.Response;
@@ -17,7 +18,7 @@ import static com.jayway.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 
-public class ConnectionResourceImplIT extends InterviewIntegrationTests {
+public class ConnectionResourceImplObserverIT extends InterviewIntegrationTests {
 
     private final static String API_PATH = "/api/network";
     private final static String CONNECT_PATH = API_PATH + "/connect";
@@ -29,6 +30,7 @@ public class ConnectionResourceImplIT extends InterviewIntegrationTests {
 
     @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
         network = networkService.getNetwork();
     }
 
@@ -76,13 +78,13 @@ public class ConnectionResourceImplIT extends InterviewIntegrationTests {
         TestUtils.assertMultipleConnections(nodeZero, nodeOne, nodeTwo);
 
         QueryConnectionDto response = queryConnection(nodeZero, nodeOne);
-        assertMultipleConnections(nodeTwo, response);
+        assertMultipleConnections(response);
 
         response = queryConnection(nodeZero, nodeTwo);
-        assertMultipleConnections(nodeOne, response);
+        assertMultipleConnections(response);
 
         response = queryConnection(nodeOne, nodeTwo);
-        assertMultipleConnections(nodeZero, response);
+        assertMultipleConnections(response);
 
         TestUtils.assertRemainingEmptyNodes(network, 3, 4, 5, 6, 7, 8, 9);
     }
@@ -105,10 +107,9 @@ public class ConnectionResourceImplIT extends InterviewIntegrationTests {
                 .extract().body().as(QueryConnectionDto.class);
     }
 
-    private void assertMultipleConnections(Node node, QueryConnectionDto response) {
+    private void assertMultipleConnections(QueryConnectionDto response) {
         assertThat(response).isNotNull();
         assertThat(response.isConnected()).isTrue();
-        assertThat(response.getOtherOriginConnections()).containsExactlyInAnyOrder(node.getId());
     }
 
 }

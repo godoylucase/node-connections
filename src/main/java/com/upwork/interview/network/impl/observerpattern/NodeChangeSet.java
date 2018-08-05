@@ -1,13 +1,15 @@
-package com.upwork.interview.network;
+package com.upwork.interview.network.impl.observerpattern;
+
+import com.upwork.interview.network.impl.Node;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class NodeChangeSet {
 
+    private final Set<Node> sourcesConnections;
     private Node source;
     private Node destination;
-    private final Set<Node> sourcesConnections;
     private boolean callback;
 
     public NodeChangeSet(Node source, Node destination, Set<Node> sourcesConnections, boolean callback) {

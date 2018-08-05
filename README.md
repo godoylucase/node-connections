@@ -4,7 +4,7 @@
 The exercise has been solved using 2 different strategies:
 - `SEARCH`: iterating over connected nodes from first parameter till reach the connection with the second one or not
 - `OBSERVER`: using observer pattern, an event broadcasting that holds the new connected node details, it is sent to 
-all the other nodes connected to it.
+all the others connected nodes.
 
 The main reason I came up with this 2 possible solutions it is the fact that SEARCH could take some time till reach the connection path
 during many iterations. Which is not happening with OBSERVER strategy where all the nodes knows all the direct connected nodes

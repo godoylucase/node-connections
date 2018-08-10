@@ -42,26 +42,31 @@ public class NodeEventListener extends Node implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent event) {
         NodeChangeSet changeSet = (NodeChangeSet) event.getNewValue();
 
-        Set<Node> nodes = changeSet.getSourcesConnections()
+        Set<Node> sourceConnectedNodes = changeSet.getSourcesConnections()
                 .parallelStream()
                 .filter(node -> !node.equals(this))
                 .collect(Collectors.toSet());
 
+        if (changeSet.isCallback()) {
+            // adding all the nodes that comes from the node that executes the callback
+            sourceConnectedNodes.forEach(this::addNode);
+            return;
+        }
+
         if (changeSet.getDestination().equals(this)) {
-            if (changeSet.isCallback()) {
-                nodes.forEach(this::addNode);
-            } else {
-                if (!this.connectedNodes.containsAll(nodes)) {
-                    nodes.forEach(this::addNode);
-                }
-                connectNode(changeSet.getSource(), true);
+            // this is new node receiving the source's list
+            if (!this.connectedNodes.containsAll(sourceConnectedNodes)) {
+                // adding all the source's connected nodes
+                sourceConnectedNodes.forEach(this::addNode);
             }
+            // connect this back (callback -> true) with source to add it
+            // as a connected node and as a listener
+            connectNode(changeSet.getSource(), true);
+
         } else {
-            if (changeSet.isCallback()) {
-                nodes.forEach(this::addNode);
-            } else {
-                addNode(changeSet.getDestination());
-            }
+            // these are other nodes (not source neither destination)
+            // adding just the new node
+            addNode(changeSet.getDestination());
         }
     }
 
